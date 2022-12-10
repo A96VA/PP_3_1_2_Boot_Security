@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>USER</title>
+    <title>Users</title>
 </head>
 <body>
-<h1>USER</h1>
+<h1>Список USER</h1>
 <div>
     <table>
         <tr>
@@ -13,23 +12,24 @@
             <th>username</th>
             <th>name</th>
             <th>email</th>
-            <th>password</th>
         </tr>
-        <tr>
+        <tr th:each="user:${users}">
             <td th:utext="${user.getId()}"></td>
             <td th:utext="${user.getUsername()}"></td>
             <td th:utext="${user.getName()}"></td>
             <td th:utext="${user.getEmail()}"></td>
-            <td th:utext="${user.getPassword()}"></td>
+            <td><a th:href="@{edit/{id}(id=${user.getId()})}">Изменить</a></td>
+            <br/>
+            <td><a th:href="@{delete/{id}(id=${user.id})}">Удалить</a></td>
         </tr>
     </table>
     <br/>
-    <form th:action="@{/admin/users}" th:method="GET">
-        <input type="submit" value="Список пользователей"/>
+    <form th:action="@{/admin/new}" th:method="GET">
+        <input type="submit" value="Добавить нового user"/>
     </form>
     <form th:action="@{/logout}" th:method="POST">
         <input type="submit" value="Logout"/>
     </form>
- </div>
+</div>
 </body>
 </html>

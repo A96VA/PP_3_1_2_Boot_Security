@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  <meta charset="UTF-8">
+  <title>Добавление пользователя</title>
+  <head>
+    <title>New USER</title>
+  </head>
+<body>
+
+<form th:method="POST" th:action="@{/admin/new}" th:object="${user}">
+  <label for="name">name</label>
+  <input type="text" th:field="*{name}" id="name"/>
+  <br/>
+  <label for="email">email</label>
+  <input type="text" th:field="*{email}" id="email"/>
+  <br/>
+  <label for="username">username: </label>
+  <input type="text" th:field="*{username}" id="username">
+  <br/>
+  <label for="password">password: </label>
+  <input type="text" th:field="*{password}" id="password">
+
+  <p>
+    <label>Access rights
+      <input type="checkbox" name="listRoles"
+             th:each="rol : ${listRoles}"
+             th:text="${rol.getNoPrefix()}"
+             th:value="${rol.role}"
+             th:field="*{roles}"
+      />
+    </label>
+  </p>
+
+  <input type="submit" value="Добавить"/>
+</form>
+<form th:action="@{/admin/users}" th:method="GET">
+  <input type="submit" value="Список пользователей"/>
+</form>
+<form th:action="@{/logout}" th:method="POST">
+  <input type="submit" value="Logout"/>
+</form>
+
+</body>
+</html>
