@@ -14,8 +14,10 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,44 +36,27 @@ public class UserServiceImplem implements UserService {
         this.userDAO = userDAO;
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDAO.findByName(username);
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("User '%s' not found", username));
+            throw new UsernameNotFoundException(String.format("User '%s' error", username));
         }
         return user;
     }
 
-    @Override
-    public boolean addRole(Role role) {
-        Role userPrimary = roleDAO.findByName(role.getRole());
-        if(userPrimary != null) {return false;}
-        roleDAO.save(role);
-        return true;
-    }
+
 
     @Override
-    public Role findByNameRole(String name) {
-        return roleDAO.findByName(name);
-    }
-
-    @Override
-    public List<Role> listRoles() {
-        return roleDAO.listRoles();
-    }
-
-    @Override
-    public Role findByIdRole(int id) {
-        return roleDAO.findByIdRole(id);
+    public LinkedHashSet<Role> listRoles() {
+        return new LinkedHashSet<>(roleDAO.listRoles());
     }
 
     @Override
     public Set<Role> listByRole(List<String> name) {
-        Set<Role> roles = new HashSet<>(roleDAO.listByName(name));
-        return roles;
+        Set<Role> rolesSet = new HashSet<>(roleDAO.listByName(name));
+        return rolesSet;
     }
 
     @Override
@@ -79,12 +64,15 @@ public class UserServiceImplem implements UserService {
         User userPrimary = userDAO.findByName(user.getUsername());
         if(userPrimary != null) {return false;}
         user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
+        List<String> list = user.getRoles().stream().map(i -> i.getRole()).collect(Collectors.toList());
+        Set<Role> set = listByRole(list);
+        user.setRoles(set);
         userDAO.save(user);
         return true;
     }
 
     @Override
-    public List<User> listUsers() {
+    public Set<User> listUsers() {
         return userDAO.listUsers();
     }
 
@@ -99,14 +87,16 @@ public class UserServiceImplem implements UserService {
          if(!userPrimary.getPassword().equals(user.getPassword())) {
             user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
         }
+        List<String> list = user.getRoles().stream().map(r -> r.getRole()).collect(Collectors.toList());
+        Set<Role> set = listByRole(list);
+        user.setRoles(set);
         userDAO.update(user);
     }
     @Override
     public User findById(int id) {
         return userDAO.findById(id);
     }
-    @Override
-    public User findByUsername(String userName) {
-        return userDAO.findByName(userName);
-    }
+
+
+
 }

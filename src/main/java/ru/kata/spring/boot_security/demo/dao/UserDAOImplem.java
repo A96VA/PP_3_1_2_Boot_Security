@@ -4,7 +4,8 @@ import ru.kata.spring.boot_security.demo.models.User;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Repository
 public class UserDAOImplem implements UserDAO {
@@ -31,8 +32,8 @@ public class UserDAOImplem implements UserDAO {
         entityManager.persist(user);
     }
 
-    public List<User> listUsers() {
-        return entityManager.createQuery("select l from User l", User.class).getResultList();
+    public Set<User> listUsers() {
+        return new LinkedHashSet<>(entityManager.createQuery("select l from User l", User.class).getResultList());
     }
 
     public User findById(int id) {

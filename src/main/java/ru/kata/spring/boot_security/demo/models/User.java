@@ -24,7 +24,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "username")
-    private String userName;
+    private String username;
 
     @Column(name = "password")
     private String password;
@@ -39,14 +39,14 @@ public class User implements UserDetails {
 
     public User(int id, String userName, String password) {
         this.id = id;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
     }
 
     public User(String firstname, String email, String userName, String password, Set<Role> roles) {
         this.name = firstname;
         this.email = email;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.roles = roles;
     }
@@ -55,7 +55,7 @@ public class User implements UserDetails {
         this.id = id;
         this.name = firstname;
         this.email = email;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.roles = roles;
     }
@@ -68,8 +68,8 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Set<Role> getRoles() {
@@ -112,7 +112,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
@@ -143,7 +143,7 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", username='" + userName + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 '}';
@@ -154,11 +154,11 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(userName, user.userName) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
+        return id == user.id && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, userName, password, roles);
+        return Objects.hash(id, name, email, username, password, roles);
     }
 }
